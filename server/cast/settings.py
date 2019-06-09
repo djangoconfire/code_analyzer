@@ -39,8 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #local -apps
     'code_analyze',
+    'cast_auth',
     # 3RD PARTY
     'rest_framework',
+    'rest_framework.authtoken',
     'corsheaders',
 ]
 
@@ -75,6 +77,13 @@ TEMPLATES = [
         },
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+
+    )
+}
 
 WSGI_APPLICATION = 'cast.wsgi.application'
 

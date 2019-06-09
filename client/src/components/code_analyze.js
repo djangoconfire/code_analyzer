@@ -49,7 +49,7 @@ class CodeAnalyze extends Component {
 
 				if (this.state.output.length === 1) {
 					this.setState({
-						output: 'There was no output'
+						output: 'No Output'
 					});
 				}
 			})
@@ -57,7 +57,7 @@ class CodeAnalyze extends Component {
 				this.setState({
 					error: '',
 					disableSubmit: false,
-					output: 'Server Error'
+					output: 'Internal Server Error'
 				});
 			});
 	};

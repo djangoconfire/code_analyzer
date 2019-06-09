@@ -19,9 +19,15 @@ class CodeAnalyzeApi(APIView):
     def post(self, request, *args, **kwargs):
         try:
             payload = request.data
+            print ("payload",payload)
+            if payload['analysis_of'] == "file":
+                f = request.FILES['file']
             language = payload['language']
             with tempfile.NamedTemporaryFile(suffix="."+language) as fp:
-                fp.write(payload['text'].encode())
+                if payload['analysis_of'] == 'file':
+                    fp.write(f.read())
+                else:
+                    fp.write(payload['text'].encode())
                 fp.flush()
                 if language in COMMANDS.keys():
                     cmd = COMMANDS[language] + " " + fp.name

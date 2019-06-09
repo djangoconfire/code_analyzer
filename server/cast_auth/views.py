@@ -10,7 +10,7 @@ from rest_framework import parsers, renderers
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serailizers import UserAuthTokenSerializer, UserSerializer
+from .serializers import UserAuthTokenSerializer, UserSerializer
 
 from .models import UserAuth
 

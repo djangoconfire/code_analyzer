@@ -1,6 +1,6 @@
 # Dependency directories
 node_modules/
-
+yarn.lock
 # Distribution / packaging
 bin/
 build/
@@ -36,4 +36,7 @@ migrations/
 
 # Fixtures
 fixtures/
+
+# Vscode
+../.vscode/
 

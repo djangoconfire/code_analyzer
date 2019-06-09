@@ -85,7 +85,7 @@ class CodeAnalyze extends Component {
 	};
 
 	handleFileUpload = (e) => {
-		this.file = this.$refs.file.files[0];
+		this.state.file = this.$refs.file.files[0];
 		if (this.file.size > 100000 || !this.file.type.match(/^text\//) || this.file.type === '') {
 			this.file = '';
 			this.error = 'Invalid file or it has an invalid type';
@@ -100,7 +100,7 @@ class CodeAnalyze extends Component {
 			<div className="code-analyze container">
 				<div className="container">
 					<h3 className="center blue-text">Code Analysis</h3>
-					<div className="large-12 medium-12 small-12 cell">
+					<div className="large-8 medium-8 small- cell">
 						<div className="input-field">
 							<p>
 								<label>
@@ -109,7 +109,6 @@ class CodeAnalyze extends Component {
 								</label>
 							</p>
 						</div>
-
 						<div className="input-field">
 							<p>
 								<label>
@@ -118,27 +117,36 @@ class CodeAnalyze extends Component {
 								</label>
 							</p>
 						</div>
-
 						<label htmlFor="lang" className="blue-text">
 							Language
 						</label>
 						<div className="input-field col s12">
 							<Select value={selectedOption} onChange={this.handleChange} options={languageOptions} />
 						</div>
+						<span className="center blue-text">Upload File</span>
 						<div>
 							<textarea style={{ width: '500px', height: '500px' }} onChange={this.handleText} />
-							<label v-show="by=='Upload'">
+							<label>
 								File(Size limit is 100,000 bytes)
-								<input type="file" id="file" ref="file" onChange={this.handleFileUpload} />
+								<input type="file" id="file" onChange={this.handleFileUpload} />
 							</label>
 						</div>
+						<br />
 						<div>
-							<button onClick={this.submitData}>Submit</button>
+							<button
+								onClick={this.submitData}
+								className="btn waves-effect waves-light"
+								type="submit"
+								name="action"
+							>
+								Submit
+							</button>
 						</div>
-						<div style={{ color: '#faa' }}>{this.state.error}</div>
+						<div style={{ color: 'red' }}>{this.state.error}</div>
+						<br />
 						<hr />
-						<div v-show="output != ''">
-							Results: <pre>{this.state.output}</pre>
+						<div>
+							Output: <pre>{this.state.output}</pre>
 						</div>
 					</div>
 				</div>

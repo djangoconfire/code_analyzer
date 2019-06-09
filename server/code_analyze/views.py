@@ -19,7 +19,7 @@ class CodeAnalyzeApi(APIView):
     def post(self, request, *args, **kwargs):
         try:
             payload = request.data
-            print ("payload",payload)
+            print("payload", payload)
             if payload['analysis_of'] == "file":
                 f = request.FILES['file']
             language = payload['language']

@@ -1,17 +1,20 @@
 __author__ = "RituRaj"
 
-
+# django impors
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.db import transaction
+
+# rest framework imports
 from rest_framework.authtoken.models import Token
 from rest_framework import status
 from rest_framework import parsers, renderers
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import UserAuthTokenSerializer, UserSerializer
 
+# local imports
+from .serializers import UserAuthTokenSerializer, UserSerializer
 from .models import UserAuth
 
 
@@ -40,8 +43,7 @@ class UserRegisterationView(APIView):
     renderer_classes = (renderers.JSONRenderer,)
 
     def post(self, request, *args, **kwargs):
-        # try:
-        if True:
+        try:
             serializer = UserSerializer(data=request.data)
             print(request.data)
             if serializer.is_valid():
@@ -57,3 +59,5 @@ class UserRegisterationView(APIView):
                 return Response({"success": True}, status=status.HTTP_200_OK)
             else:
                 return Response({"success": False}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"success": False}, status=status.HTTP_400_BAD_REQUEST)

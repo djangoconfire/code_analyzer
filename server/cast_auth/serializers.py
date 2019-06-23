@@ -3,11 +3,8 @@ __author__ = "RituRaj"
 
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
-
-from django.contrib.auth import authenticate
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 
-from django.contrib.auth.models import User
 from .functions import check_credentials
 from .models import UserAuth
 

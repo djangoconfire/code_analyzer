@@ -10,12 +10,10 @@ class CodeAnalyze extends Component {
 		output: '',
 		analysis_of: '',
 		text: '',
+		textSelected: false,
+		fileSelected: false,
 		disableSubmit: false,
-		languageOptions: [
-			{ value: 'py', label: 'Python' },
-			{ value: 'cpp', label: 'C++' },
-			{ value: 'js', label: 'Javascript' }
-		],
+		languageOptions: [ { value: 'py', label: 'Python' }, { value: 'js', label: 'Javascript' } ],
 		selectedOption: ''
 	};
 
@@ -28,12 +26,11 @@ class CodeAnalyze extends Component {
 		} else {
 			return;
 		}
-		console.log('selected option', this.state.selectedOption);
-		console.log('selected option', this.state.analysis_of);
 
 		formData.set('analysis_of', this.state.analysis_of);
 		formData.set('language', this.state.selectedOption.value);
-		console.log('formdata', formData);
+		formData.append('file', this.state.file);
+		console.log('formdata', formData, this.state.file.name);
 		axios
 			.post(CONSTANTS.SERVER_URL + '/api/code_analyze/', formData, {
 				headers: {
@@ -75,78 +72,123 @@ class CodeAnalyze extends Component {
 	handleCheckBox = (e) => {
 		if (e.target.id === 'file') {
 			this.setState({
-				analysis_of: 'file'
+				analysis_of: 'file',
+				fileSelected: true,
+				textSelected: false
 			});
 		} else {
 			this.setState({
-				analysis_of: 'text'
+				analysis_of: 'text',
+				textSelected: true,
+				fileSelected: false
 			});
 		}
 	};
 
 	handleFileUpload = (e) => {
-		this.state.file = this.$refs.file.files[0];
-		if (this.file.size > 100000 || !this.file.type.match(/^text\//) || this.file.type === '') {
-			this.file = '';
-			this.error = 'Invalid file or it has an invalid type';
+		this.setState({
+			file: e.target.files[0]
+		});
+		if (this.state.file.size > 100000) {
+			this.setState({
+				file: '',
+				error: 'Invalid file or it has an invalid type'
+			});
 		} else {
-			this.error = '';
+			this.setState({
+				error: ''
+			});
 		}
 	};
 
 	render() {
-		const { selectedOption, languageOptions, analysisOptions, analysis_of } = this.state;
+		const { selectedOption, languageOptions, textSelected, fileSelected } = this.state;
+
 		return (
 			<div className="code-analyze container">
 				<div className="container">
+					<br />
 					<h3 className="center blue-text">Code Analysis</h3>
-					<div className="large-8 medium-8 small- cell">
-						<div className="input-field">
-							<p>
-								<label>
-									<input type="checkbox" id="file" onChange={this.handleCheckBox} />
-									<span>Upload File</span>
-								</label>
-							</p>
+					<div className="row">
+						<div className="col-md-8 col-lg-8 col-sm-8">
+							<div className="input-field">
+								<p>
+									<label>
+										<input
+											type="checkbox"
+											id="file"
+											onChange={this.handleCheckBox}
+											checked={fileSelected}
+										/>
+										<span>Upload File</span>
+									</label>
+								</p>
+							</div>
+							<div className="input-field">
+								<p>
+									<label>
+										<input
+											type="checkbox"
+											id="text"
+											onChange={this.handleCheckBox}
+											checked={textSelected}
+										/>
+										<span>Text</span>
+									</label>
+								</p>
+							</div>
+							{textSelected ? (
+								<div className="row">
+									<div className="col-md-8 col-lg-8 col-sm-8">
+										<label htmlFor="lang" className="blue-text">
+											Language
+										</label>
+										<Select
+											value={selectedOption}
+											onChange={this.handleChange}
+											options={languageOptions}
+										/>
+										<br />
+										<textarea
+											style={{ width: '440px', height: '200px' }}
+											onChange={this.handleText}
+											placeholder="Paste the Code here..."
+										/>
+										<br />
+										<button
+											onClick={this.submitData}
+											className="btn waves-effect waves-light"
+											type="submit"
+											name="action"
+										>
+											Submit
+										</button>
+									</div>
+								</div>
+							) : (
+								<div>
+									<label>
+										File(Size limit is 100 KB)
+										<input type="file" id="file" onChange={this.handleFileUpload} />
+									</label>
+									<br />
+									<br />
+									<button
+										onClick={this.submitData}
+										className="btn waves-effect waves-light"
+										type="submit"
+										name="action"
+									>
+										Submit
+									</button>
+								</div>
+							)}
+							<br />
 						</div>
-						<div className="input-field">
-							<p>
-								<label>
-									<input type="checkbox" id="text" onChange={this.handleCheckBox} />
-									<span>Text</span>
-								</label>
-							</p>
-						</div>
-						<label htmlFor="lang" className="blue-text">
-							Language
-						</label>
-						<div className="input-field col s12">
-							<Select value={selectedOption} onChange={this.handleChange} options={languageOptions} />
-						</div>
-						<span className="center blue-text">Upload File</span>
-						<div>
-							<textarea style={{ width: '500px', height: '500px' }} onChange={this.handleText} />
-							<label>
-								File(Size limit is 100,000 bytes)
-								<input type="file" id="file" onChange={this.handleFileUpload} />
-							</label>
-						</div>
-						<br />
-						<div>
-							<button
-								onClick={this.submitData}
-								className="btn waves-effect waves-light"
-								type="submit"
-								name="action"
-							>
-								Submit
-							</button>
-						</div>
-						<div style={{ color: 'red' }}>{this.state.error}</div>
-						<br />
-						<hr />
-						<div>
-							Output: <pre>{this.state.output}</pre>
+
+						<div className="col-md-4 col-lg-4 col-sm-4">
+							Output:
+							{this.state.output ? <pre>{this.state.output}</pre> : ''}
 						</div>
 					</div>
 				</div>

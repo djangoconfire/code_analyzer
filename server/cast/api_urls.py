@@ -18,4 +18,5 @@ urlpatterns = [
     url('user/register',
         cast_auth.views.UserRegisterationView.as_view(), name="register_user"),
 
+   
 ]
